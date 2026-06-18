@@ -30,6 +30,22 @@
 
     a { text-decoration: none; color: inherit; }
 
+    /* Scroll reveal setup */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Utility glow text */
+    .glow-text {
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+    }
+
     header {
       background: rgba(11, 17, 32, 0.95);
       padding: 1rem 2rem;
@@ -51,8 +67,9 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      transition: transform 0.3s ease;
     }
-
+    .logo:hover { transform: scale(1.03); }
     .logo span { font-size: 1.8rem; }
 
     nav ul {
@@ -67,9 +84,22 @@
       color: var(--text-muted);
       font-weight: 500;
       transition: color 0.2s;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
     }
 
     nav a:hover { color: var(--accent); }
+    nav a:hover::after { width: 100%; }
 
     .btn {
       background: var(--primary);
@@ -83,18 +113,20 @@
       transition: all 0.2s;
       border: none;
       cursor: pointer;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
     }
 
     .btn:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       background: var(--accent);
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
     }
 
     .btn-outline {
       background: transparent;
       border: 2px solid var(--primary);
       color: var(--accent);
+      box-shadow: none;
     }
 
     .btn-outline:hover { background: var(--primary); color: white; }
@@ -111,6 +143,51 @@
         radial-gradient(circle at 80% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
         linear-gradient(to bottom, var(--dark), var(--darker));
       position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      animation: float 10s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--primary);
+      top: 10%;
+      left: -5%;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: #8b5cf6;
+      bottom: 10%;
+      right: -5%;
+      animation-delay: 3s;
+    }
+
+    .orb-3 {
+      width: 200px;
+      height: 200px;
+      background: var(--accent);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 6s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
     }
 
     .hero::before {
@@ -125,13 +202,14 @@
     }
 
     .hero-content h1 {
-      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-size: clamp(2.8rem, 6.5vw, 5.5rem);
       font-weight: 900;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: -1px;
     }
 
     .hero-content p {
@@ -148,6 +226,35 @@
       flex-wrap: wrap;
     }
 
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .live-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #22c55e;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
     .stats {
       display: flex;
       gap: 3rem;
@@ -156,7 +263,20 @@
       flex-wrap: wrap;
     }
 
-    .stat { text-align: center; }
+    .stat {
+      text-align: center;
+      padding: 1rem 1.5rem;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      min-width: 130px;
+      transition: transform 0.3s ease, border-color 0.3s;
+    }
+    .stat:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
     .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
     .stat-label { color: var(--text-muted); font-size: 0.95rem; }
 
@@ -164,6 +284,7 @@
       padding: 5rem 2rem;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
     }
 
     .section-title {
@@ -199,12 +320,13 @@
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
       border-color: var(--primary);
       box-shadow: 0 15px 40px rgba(59, 130, 246, 0.15);
     }
 
-    .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .card-icon { font-size: 2.5rem; margin-bottom: 1rem; display: inline-block; transition: transform 0.3s; }
+    .card:hover .card-icon { transform: scale(1.15); }
 
     .card h3 {
       font-size: 1.25rem;
@@ -269,13 +391,30 @@
     .purchase-card {
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
       border: 1px solid var(--primary);
+      position: relative;
+      overflow: hidden;
     }
 
+    .purchase-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: rotate(30deg);
+      transition: 0.6s;
+      opacity: 0;
+    }
+    .purchase-card:hover::before { opacity: 1; }
+
     .price {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 800;
       color: var(--accent);
       margin: 1rem 0;
+      text-shadow: 0 0 15px rgba(96, 165, 250, 0.3);
     }
 
     .features-list {
@@ -317,9 +456,18 @@
       border-radius: 16px;
       padding: 1.8rem;
       text-align: center;
+      transition: all 0.3s;
     }
 
-    .pilot-card-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .pilot-card:hover, .rank-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--primary);
+      box-shadow: 0 12px 35px rgba(59, 130, 246, 0.12);
+    }
+
+    .pilot-card-icon { font-size: 3rem; margin-bottom: 1rem; transition: transform 0.3s; }
+    .pilot-card:hover .pilot-card-icon { transform: scale(1.15) rotate(5deg); }
+
     .pilot-card h3, .rank-card h3 { color: var(--accent); margin-bottom: 0.5rem; }
     .pilot-card p, .rank-card p { color: var(--text-muted); font-size: 0.95rem; }
 
@@ -350,9 +498,15 @@
       max-width: 900px;
       margin: 0 auto;
       flex-wrap: wrap;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .discord-icon { font-size: 4rem; }
+    .discord-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(88, 101, 242, 0.2);
+    }
+
+    .discord-icon { font-size: 4rem; filter: drop-shadow(0 0 15px rgba(88, 101, 242, 0.5)); }
     .discord-info { flex: 1; min-width: 250px; }
     .discord-info h2 { margin-bottom: 0.5rem; color: #fff; }
     .discord-info p { color: var(--text-muted); margin-bottom: 1.5rem; }
@@ -363,18 +517,24 @@
       box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
     }
 
-    .owner-card { text-align: center; }
+    .owner-card { text-align: center; transition: all 0.3s; }
+    .owner-card:hover { transform: translateY(-5px); }
     .owner-avatar {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       background: linear-gradient(135deg, var(--primary), var(--accent));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 2.2rem;
       margin: 0 auto 1rem;
       font-weight: 800;
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+      transition: box-shadow 0.3s;
+    }
+    .owner-card:hover .owner-avatar {
+      box-shadow: 0 0 35px rgba(96, 165, 250, 0.5);
     }
 
     .faq-item {
@@ -383,7 +543,9 @@
       border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1rem;
+      transition: border-color 0.3s;
     }
+    .faq-item:hover { border-color: var(--primary); }
 
     .faq-item h4 { color: var(--accent); margin-bottom: 0.5rem; }
     .faq-item p { color: var(--text-muted); }
@@ -395,7 +557,9 @@
       padding: 2rem;
       margin-top: 2rem;
       text-align: center;
+      transition: all 0.3s;
     }
+    .highlight-box:hover { border-color: var(--primary); }
 
     .highlight-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
 
@@ -421,6 +585,22 @@
     }
 
     td { color: var(--text-muted); }
+    tr { transition: background 0.2s; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* Section separators */
+    section::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: 0.4;
+    }
+    section:last-of-type::after { display: none; }
 
     footer {
       text-align: center;
@@ -432,11 +612,47 @@
 
     footer a { color: var(--accent); }
 
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 45px;
+      height: 45px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+      z-index: 99;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    }
+
     @media (max-width: 768px) {
       nav ul { gap: 1rem; font-size: 0.85rem; }
       header { padding: 1rem; }
       .hero { padding-top: 7rem; }
-      .stats { gap: 2rem; }
+      .stats { gap: 1rem; }
+      .discord-box { text-align: center; justify-content: center; }
     }
   </style>
 </head>
@@ -463,27 +679,31 @@
   </header>
 
   <section class="hero" id="home">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
     <div class="hero-content">
-      <h1>Sankai Airlines</h1>
+      <div class="live-badge">Live Roleplay Community</div>
+      <h1 class="glow-text">Sankai Airlines</h1>
       <p>Experience realistic airport roleplay in Roblox. Become a pilot, join the cabin crew, work ground operations, or relax as a passenger — every flight is a new adventure.</p>
       <div class="hero-btns">
         <a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank">🎮 Join Our Discord</a>
-        <a href="#classes" class="btn btn-outline">🎟️ Buy Tickets</a>
       </div>
       <div class="stats">
-        <div class="stat">
+        <div class="stat reveal">
           <div class="stat-number">4</div>
           <div class="stat-label">Main Departments</div>
         </div>
-        <div class="stat">
+        <div class="stat reveal">
           <div class="stat-number">10+</div>
           <div class="stat-label">Roleplay Roles</div>
         </div>
-        <div class="stat">
+        <div class="stat reveal">
           <div class="stat-number">2</div>
           <div class="stat-label">Ticket Classes</div>
         </div>
-        <div class="stat">
+        <div class="stat reveal">
           <div class="stat-number">∞</div>
           <div class="stat-label">Destinations</div>
         </div>
@@ -492,9 +712,9 @@
   </section>
 
   <section id="about">
-    <h2 class="section-title">About The Game</h2>
-    <p class="section-subtitle">Welcome to Sankai Airlines — the most immersive Roblox airport roleplay experience.</p>
-    <div class="grid">
+    <h2 class="section-title reveal">About The Game</h2>
+    <p class="section-subtitle reveal">Welcome to Sankai Airlines — the most immersive Roblox airport roleplay experience.</p>
+    <div class="grid reveal">
       <div class="card">
         <div class="card-icon">🛫</div>
         <h3>Realistic Flights</h3>
@@ -519,10 +739,10 @@
   </section>
 
   <section id="roles" style="background: var(--darker); border-radius: 30px;">
-    <h2 class="section-title">Airport Roles & Departments</h2>
-    <p class="section-subtitle">Explore every career path available at Sankai Airlines. Each department has unique responsibilities and ranks to progress through.</p>
+    <h2 class="section-title reveal">Airport Roles & Departments</h2>
+    <p class="section-subtitle reveal">Explore every career path available at Sankai Airlines. Each department has unique responsibilities and ranks to progress through.</p>
 
-    <div class="grid">
+    <div class="grid reveal">
       <div class="card">
         <span class="role-tag">In-Flight Department</span>
         <div class="card-icon">🥤</div>
@@ -577,7 +797,7 @@
       </div>
     </div>
 
-    <div class="rank-grid" style="margin-top: 3rem;">
+    <div class="rank-grid reveal" style="margin-top: 3rem;">
       <div class="rank-card">
         <span class="rank-level">Entry Level</span>
         <h3>Trainee / Junior</h3>
@@ -602,14 +822,14 @@
   </section>
 
   <section id="pilots" class="pilot-section">
-    <h2 class="section-title">Become a Sankai Airlines Pilot</h2>
-    <p class="section-subtitle">Take control of the aircraft and transport passengers safely across the skies.</p>
+    <h2 class="section-title reveal">Become a Sankai Airlines Pilot</h2>
+    <p class="section-subtitle reveal">Take control of the aircraft and transport passengers safely across the skies.</p>
 
-    <p style="text-align: center; color: var(--text-muted); max-width: 850px; margin: 0 auto 2rem;">
+    <p class="reveal" style="text-align: center; color: var(--text-muted); max-width: 850px; margin: 0 auto 2rem;">
       Pilots are essential to Sankai Airlines. As a pilot, you operate our aircraft, follow real-world aviation procedures, communicate with ATC and crew, and provide passengers with a safe and enjoyable flight.
     </p>
 
-    <ol class="pilot-list">
+    <ol class="pilot-list reveal">
       <li>Follow all ATC instructions during taxi, takeoff, cruise, approach, and landing.</li>
       <li>Complete full pre-flight checks before every departure.</li>
       <li>Maintain professional radio communication with cabin crew and ground crew.</li>
@@ -620,7 +840,7 @@
       <li>Attend training sessions to advance through pilot ranks.</li>
     </ol>
 
-    <div class="pilot-info">
+    <div class="pilot-info reveal">
       <div class="pilot-card">
         <div class="pilot-card-icon">🛫</div>
         <h3>Takeoff Phase</h3>
@@ -643,16 +863,16 @@
       </div>
     </div>
 
-    <div style="text-align: center; margin-top: 2.5rem;">
+    <div class="reveal" style="text-align: center; margin-top: 2.5rem;">
       <a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank">Apply to Become a Pilot</a>
     </div>
   </section>
 
   <section id="fleet">
-    <h2 class="section-title">Our Fleet</h2>
-    <p class="section-subtitle">Aircraft operated by Sankai Airlines for our roleplay flights.</p>
+    <h2 class="section-title reveal">Our Fleet</h2>
+    <p class="section-subtitle reveal">Aircraft operated by Sankai Airlines for our roleplay flights.</p>
 
-    <div style="overflow-x: auto;">
+    <div class="reveal" style="overflow-x: auto;">
       <table>
         <thead>
           <tr>
@@ -693,10 +913,10 @@
   </section>
 
   <section id="classes">
-    <h2 class="section-title">Flight Tickets</h2>
-    <p class="section-subtitle">Upgrade your travel experience with exclusive Sankai Airlines ticket classes.</p>
+    <h2 class="section-title reveal">Flight Tickets</h2>
+    <p class="section-subtitle reveal">Upgrade your travel experience with exclusive Sankai Airlines ticket classes.</p>
 
-    <div class="grid">
+    <div class="grid reveal">
       <div class="card purchase-card">
         <div class="card-icon">⭐</div>
         <h3>Premium Economy Class</h3>
@@ -728,10 +948,10 @@
   </section>
 
   <section id="rules">
-    <h2 class="section-title">Discord Public Rules</h2>
-    <p class="section-subtitle">Community rules to keep Sankai Airlines safe and enjoyable for everyone.</p>
+    <h2 class="section-title reveal">Discord Public Rules</h2>
+    <p class="section-subtitle reveal">Community rules to keep Sankai Airlines safe and enjoyable for everyone.</p>
 
-    <ol class="rules-list">
+    <ol class="rules-list reveal">
       <li>Please do not send insulting or offensive messages to other members.</li>
       <li>Please do not share any inappropriate, NSFW, or disturbing content in the chat.</li>
       <li>Do not use any hacks, exploits, cheats, or glitches during flights or in the airport.</li>
@@ -744,10 +964,10 @@
   </section>
 
   <section id="staff" style="background: var(--darker); border-radius: 30px;">
-    <h2 class="section-title">Sankai Airlines Staff Handbook</h2>
-    <p class="section-subtitle">Rules and expectations for all Sankai Airlines employees.</p>
+    <h2 class="section-title reveal">Sankai Airlines Staff Handbook</h2>
+    <p class="section-subtitle reveal">Rules and expectations for all Sankai Airlines employees.</p>
 
-    <ol class="handbook-list">
+    <ol class="handbook-list reveal">
       <li>Please join the server at least 10 minutes before the flight opens.</li>
       <li>Do not use offensive or insulting language toward passengers or staff.</li>
       <li>Do not insult, disrespect, or argue with any staff members or management.</li>
@@ -760,7 +980,7 @@
       <li>Represent Sankai Airlines professionally at all times.</li>
     </ol>
 
-    <div class="highlight-box">
+    <div class="highlight-box reveal">
       <h3>💼 Staff Applications</h3>
       <p>Want to join the Sankai Airlines team? Visit our Discord server and open an application ticket. Applications open regularly for Cabin Crew, Ground Crew, Airport Staff, and Pilots.</p>
       <a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank" style="margin-top: 1rem;">Apply on Discord</a>
@@ -768,10 +988,10 @@
   </section>
 
   <section id="owners">
-    <h2 class="section-title">Meet The Owners</h2>
-    <p class="section-subtitle">The leadership team behind Sankai Airlines.</p>
+    <h2 class="section-title reveal">Meet The Owners</h2>
+    <p class="section-subtitle reveal">The leadership team behind Sankai Airlines.</p>
 
-    <div class="grid" style="max-width: 700px;">
+    <div class="grid reveal" style="max-width: 700px;">
       <div class="card owner-card">
         <div class="owner-avatar">A</div>
         <h3>lol160129</h3>
@@ -788,36 +1008,36 @@
   </section>
 
   <section id="faq">
-    <h2 class="section-title">Frequently Asked Questions</h2>
-    <p class="section-subtitle">Common questions about Sankai Airlines.</p>
+    <h2 class="section-title reveal">Frequently Asked Questions</h2>
+    <p class="section-subtitle reveal">Common questions about Sankai Airlines.</p>
 
-    <div class="faq-item">
+    <div class="faq-item reveal">
       <h4>How do I join a flight?</h4>
       <p>Join our Discord server, check the flight schedule, and join the game when a flight opens. Make sure to buy a ticket if you want Premium Economy or Business Class.</p>
     </div>
-    <div class="faq-item">
+    <div class="faq-item reveal">
       <h4>How do I become staff?</h4>
       <p>Open an application ticket in our Discord server when applications are open. You can apply for Cabin Crew, Ground Crew, Airport Staff, or Pilot roles.</p>
     </div>
-    <div class="faq-item">
+    <div class="faq-item reveal">
       <h4>Can I be a pilot?</h4>
       <p>Yes! Pilot applications are open regularly. You must attend training and pass exams to advance through pilot ranks.</p>
     </div>
-    <div class="faq-item">
+    <div class="faq-item reveal">
       <h4>Do I need tickets to fly?</h4>
       <p>Economy Class is free. Premium Economy and Business Class tickets are optional but give you extra perks and comfort.</p>
     </div>
-    <div class="faq-item">
+    <div class="faq-item reveal">
       <h4>Who are the owners?</h4>
       <p>Sankai Airlines is owned by Andreas (lol160129) and Nick (nicholasmallorca).</p>
     </div>
   </section>
 
-  <section class="discord-section">
-    <h2 class="section-title">Join Our Discord</h2>
-    <p class="section-subtitle">Flight schedules, announcements, staff applications, and community events.</p>
+  <section class="discord-section reveal">
+    <h2 class="section-title reveal">Join Our Discord</h2>
+    <p class="section-subtitle reveal">Flight schedules, announcements, staff applications, and community events.</p>
 
-    <div class="discord-box">
+    <div class="discord-box reveal">
       <div class="discord-icon">💬</div>
       <div class="discord-info">
         <h2>Sankai Airlines Community</h2>
@@ -832,5 +1052,36 @@
     <p style="margin-top: 0.5rem;">Not affiliated with Roblox Corporation. | <a href="https://discord.gg/9sFHnWtNx" target="_blank">Discord</a></p>
   </footer>
 
+  <!-- Back to top button -->
+  <div class="back-to-top" id="backToTop" aria-label="Back to top">↑</div>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Back to top button
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+
 </body>
-</html>
+</html
