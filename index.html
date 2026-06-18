@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sankai Airlines | Roblox Airport Roleplay</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --accent: #60a5fa;
+      --dark: #0b1120;
+      --darker: #070b14;
+      --light: #f8fafc;
+      --text-muted: #94a3b8;
+      --glass: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    header {
+      background: rgba(11, 17, 32, 0.95);
+      padding: 1rem 2rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo span { font-size: 1.8rem; }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: var(--accent);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--accent);
+    }
+
+    .btn-outline:hover { background: var(--primary); color: white; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
+        linear-gradient(to bottom, var(--dark), var(--darker));
+      position: relative;
+    }
+
+    .hero::before {
+      content: '✈';
+      position: absolute;
+      font-size: 30rem;
+      opacity: 0.03;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      pointer-events: none;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-content p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 750px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+    .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+    .stat-label { color: var(--text-muted); font-size: 0.95rem; }
+
+    section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 40px rgba(59, 130, 246, 0.15);
+    }
+
+    .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+    }
+
+    .card p, .card li { color: var(--text-muted); }
+
+    .role-tag {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--accent);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    .rules-list, .handbook-list, .pilot-list, .general-list {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      max-width: 850px;
+      margin: 0 auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .rules-list li, .handbook-list li, .pilot-list li, .general-list li {
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .rules-list li::before {
+      content: '▸';
+      position: absolute;
+      left: -0.2rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .handbook-list li::before, .general-list li::before {
+      content: '✓';
+      position: absolute;
+      left: -0.2rem;
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    .pilot-list li::before {
+      content: '✈';
+      position: absolute;
+      left: -0.2rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .purchase-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
+      border: 1px solid var(--primary);
+    }
+
+    .price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 1rem 0;
+    }
+
+    .features-list {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .features-list li {
+      padding: 0.4rem 0;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .features-list li::before {
+      content: '✓';
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    .pilot-section {
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(30, 64, 175, 0.02));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pilot-info, .rank-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 2rem auto 0;
+    }
+
+    .pilot-card, .rank-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      text-align: center;
+    }
+
+    .pilot-card-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .pilot-card h3, .rank-card h3 { color: var(--accent); margin-bottom: 0.5rem; }
+    .pilot-card p, .rank-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    .rank-card .rank-level {
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .discord-section {
+      background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(88, 101, 242, 0.02));
+      border-top: 1px solid var(--border);
+    }
+
+    .discord-box {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      background: var(--glass);
+      border: 1px solid rgba(88, 101, 242, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .discord-icon { font-size: 4rem; }
+    .discord-info { flex: 1; min-width: 250px; }
+    .discord-info h2 { margin-bottom: 0.5rem; color: #fff; }
+    .discord-info p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .discord-btn { background: #5865F2; }
+    .discord-btn:hover {
+      background: #4752C4;
+      box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+    }
+
+    .owner-card { text-align: center; }
+    .owner-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1rem;
+      font-weight: 800;
+    }
+
+    .faq-item {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .faq-item h4 { color: var(--accent); margin-bottom: 0.5rem; }
+    .faq-item p { color: var(--text-muted); }
+
+    .highlight-box {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .highlight-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--glass);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    td { color: var(--text-muted); }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: var(--darker);
+    }
+
+    footer a { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      nav ul { gap: 1rem; font-size: 0.85rem; }
+      header { padding: 1rem; }
+      .hero { padding-top: 7rem; }
+      .stats { gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <span>✈️</span>
+      Sankai Airlines
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#roles">Roles</a></li>
+        <li><a href="#pilots">Pilots</a></li>
+        <li><a href="#fleet">Fleet</a></li>
+        <li><a href="#classes">Tickets</a></li>
+        <li><a href="#rules">Rules</a></li>
+        <li><a href="#staff">Staff</a></li>
+        <li><a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank">Discord</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Sankai Airlines</h1>
+      <p>Experience realistic airport roleplay in Roblox. Become a pilot, join the cabin crew, work ground operations, or relax as a passenger — every flight is a new adventure.</p>
+      <div class="hero-btns">
+        <a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank">🎮 Join Our Discord</a>
+        <a href="#classes" class="btn btn-outline">🎟️ Buy Tickets</a>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Main Departments</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Roleplay Roles</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Ticket Classes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Destinations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">About The Game</h2>
+    <p class="section-subtitle">Welcome to Sankai Airlines — the most immersive Roblox airport roleplay experience.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="card-icon">🛫</div>
+        <h3>Realistic Flights</h3>
+        <p>Every flight follows realistic procedures: boarding, safety briefing, taxi, takeoff, cruising, landing, and deboarding. Pilots and crew work together for a smooth experience.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏢</div>
+        <h3>Full Airport Operation</h3>
+        <p>From check-in counters and security to gates, baggage handling, and ATC — the airport never stops moving. Every department plays a critical role.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👥</div>
+        <h3>Active Roleplay Community</h3>
+        <p>Join scheduled flights, special events, recruitment days, and community gatherings. Make friends and rise through the ranks.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎭</div>
+        <h3>Detailed Roles & Ranks</h3>
+        <p>Whether you want to fly planes, serve passengers, manage the terminal, or handle baggage, there's a role with a clear career path for you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="roles" style="background: var(--darker); border-radius: 30px;">
+    <h2 class="section-title">Airport Roles & Departments</h2>
+    <p class="section-subtitle">Explore every career path available at Sankai Airlines. Each department has unique responsibilities and ranks to progress through.</p>
+
+    <div class="grid">
+      <div class="card">
+        <span class="role-tag">In-Flight Department</span>
+        <div class="card-icon">🥤</div>
+        <h3>Cabin Crew</h3>
+        <p>Cabin Crew are the face of Sankai Airlines in the air. They welcome passengers, conduct safety demonstrations, serve refreshments, handle in-flight requests, and ensure passenger comfort from boarding to deboarding.</p>
+        <ul style="margin-top: 1rem; list-style: none;">
+          <li>✓ Greet and seat passengers</li>
+          <li>✓ Perform safety demonstrations</li>
+          <li>✓ Serve food, drinks, and snacks</li>
+          <li>✓ Assist passengers with special needs</li>
+          <li>✓ Communicate with the Flight Deck</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="role-tag">Ground Operations</span>
+        <div class="card-icon">🚧</div>
+        <h3>Ground Crew</h3>
+        <p>Ground Crew keep the airport running on the tarmac. They guide aircraft in and out of gates, load/unload baggage, refuel planes, and coordinate with pilots and gate agents.</p>
+        <ul style="margin-top: 1rem; list-style: none;">
+          <li>✓ Marshal aircraft to gates</li>
+          <li>✓ Load and unload luggage</li>
+          <li>✓ Refuel and inspect aircraft</li>
+          <li>✓ Perform pushback operations</li>
+          <li>✓ Maintain ground safety</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="role-tag">Terminal Services</span>
+        <div class="card-icon">🎫</div>
+        <h3>Airport Staff</h3>
+        <p>Airport Staff manage everything inside the terminal. They help passengers check in, verify tickets, operate security, run gates, and answer questions at information desks.</p>
+        <ul style="margin-top: 1rem; list-style: none;">
+          <li>✓ Operate check-in counters</li>
+          <li>✓ Verify boarding passes at gates</li>
+          <li>✓ Run security screenings</li>
+          <li>✓ Provide customer service</li>
+          <li>✓ Make boarding announcements</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="role-tag">Flight Operations</span>
+        <div class="card-icon">✈️</div>
+        <h3>Flight Deck</h3>
+        <p>Flight Deck crew are responsible for flying the aircraft. They communicate with ATC, perform pre-flight checks, taxi, take off, cruise, land, and keep passengers safe throughout the journey.</p>
+        <ul style="margin-top: 1rem; list-style: none;">
+          <li>✓ Communicate with ATC</li>
+          <li>✓ Complete pre-flight checks</li>
+          <li>✓ Taxi, take off, and land safely</li>
+          <li>✓ Coordinate with Cabin Crew</li>
+          <li>✓ Follow realistic flight routes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rank-grid" style="margin-top: 3rem;">
+      <div class="rank-card">
+        <span class="rank-level">Entry Level</span>
+        <h3>Trainee / Junior</h3>
+        <p>New staff members begin here. Learn the basics of your role, observe senior members, and complete simple tasks.</p>
+      </div>
+      <div class="rank-card">
+        <span class="rank-level">Standard</span>
+        <h3>Crew / Agent / Officer</h3>
+        <p>Once trained, you take on regular duties independently. You handle flights, serve passengers, or operate ground tasks.</p>
+      </div>
+      <div class="rank-card">
+        <span class="rank-level">Senior</span>
+        <h3>Senior / Supervisor</h3>
+        <p>Experienced members who lead shifts, train juniors, resolve issues, and make sure operations run smoothly.</p>
+      </div>
+      <div class="rank-card">
+        <span class="rank-level">Management</span>
+        <h3>Manager / Captain / Head</h3>
+        <p>Top leaders of each department. They handle recruitment, host flights, manage staff, and report to owners.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pilots" class="pilot-section">
+    <h2 class="section-title">Become a Sankai Airlines Pilot</h2>
+    <p class="section-subtitle">Take control of the aircraft and transport passengers safely across the skies.</p>
+
+    <p style="text-align: center; color: var(--text-muted); max-width: 850px; margin: 0 auto 2rem;">
+      Pilots are essential to Sankai Airlines. As a pilot, you operate our aircraft, follow real-world aviation procedures, communicate with ATC and crew, and provide passengers with a safe and enjoyable flight.
+    </p>
+
+    <ol class="pilot-list">
+      <li>Follow all ATC instructions during taxi, takeoff, cruise, approach, and landing.</li>
+      <li>Complete full pre-flight checks before every departure.</li>
+      <li>Maintain professional radio communication with cabin crew and ground crew.</li>
+      <li>Fly assigned routes and approach procedures for realism.</li>
+      <li>Always prioritize passenger and crew safety.</li>
+      <li>Never abandon your aircraft, intentionally crash, or troll during flights.</li>
+      <li>Report any issues to supervisors or management after the flight.</li>
+      <li>Attend training sessions to advance through pilot ranks.</li>
+    </ol>
+
+    <div class="pilot-info">
+      <div class="pilot-card">
+        <div class="pilot-card-icon">🛫</div>
+        <h3>Takeoff Phase</h3>
+        <p>Request taxi clearance, perform runway checks, line up, request takeoff clearance, and rotate smoothly.</p>
+      </div>
+      <div class="pilot-card">
+        <div class="pilot-card-icon">☁️</div>
+        <h3>Cruise Phase</h3>
+        <p>Follow your flight route, maintain assigned altitude, and coordinate with cabin crew for passenger service.</p>
+      </div>
+      <div class="pilot-card">
+        <div class="pilot-card-icon">🛬</div>
+        <h3>Landing Phase</h3>
+        <p>Request approach clearance, descend carefully, align with the runway, and execute a smooth touchdown.</p>
+      </div>
+      <div class="pilot-card">
+        <div class="pilot-card-icon">🎓</div>
+        <h3>Training & Ranks</h3>
+        <p>Start as a Trainee Pilot, then progress to First Officer, Captain, and Senior Captain through experience and exams.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank">Apply to Become a Pilot</a>
+    </div>
+  </section>
+
+  <section id="fleet">
+    <h2 class="section-title">Our Fleet</h2>
+    <p class="section-subtitle">Aircraft operated by Sankai Airlines for our roleplay flights.</p>
+
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Aircraft</th>
+            <th>Type</th>
+            <th>Capacity</th>
+            <th>Used For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Boeing 747</td>
+            <td>Wide-Body Jet</td>
+            <td>300+ Passengers</td>
+            <td>Long-haul international flights</td>
+          </tr>
+          <tr>
+            <td>Airbus A320</td>
+            <td>Narrow-Body Jet</td>
+            <td>150+ Passengers</td>
+            <td>Short-haul and domestic flights</td>
+          </tr>
+          <tr>
+            <td>Boeing 737</td>
+            <td>Narrow-Body Jet</td>
+            <td>160+ Passengers</td>
+            <td>Regional routes</td>
+          </tr>
+          <tr>
+            <td>Airbus A350</td>
+            <td>Wide-Body Jet</td>
+            <td>300+ Passengers</td>
+            <td>Premium long-distance flights</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="classes">
+    <h2 class="section-title">Flight Tickets</h2>
+    <p class="section-subtitle">Upgrade your travel experience with exclusive Sankai Airlines ticket classes.</p>
+
+    <div class="grid">
+      <div class="card purchase-card">
+        <div class="card-icon">⭐</div>
+        <h3>Premium Economy Class</h3>
+        <p>A step above standard Economy with extra comfort, faster boarding, and improved service.</p>
+        <div class="price">50 Robux</div>
+        <ul class="features-list">
+          <li>Priority boarding before Economy passengers</li>
+          <li>More spacious seating than Economy Class</li>
+          <li>High-quality in-flight food and drink service</li>
+          <li>Complimentary welcome drink</li>
+        </ul>
+        <a href="https://www.roblox.com/catalog/97002332723597/Premium-Economy" class="btn" target="_blank">Buy Premium Economy</a>
+      </div>
+      <div class="card purchase-card">
+        <div class="card-icon">💎</div>
+        <h3>Business Class</h3>
+        <p>The ultimate Sankai Airlines experience with lounge access, premium seating, and first-class service.</p>
+        <div class="price">100 Robux</div>
+        <ul class="features-list">
+          <li>Exclusive airport lounge access</li>
+          <li>Priority check-in and boarding</li>
+          <li>Extra spacious lie-flat seating</li>
+          <li>Premium in-flight meals and drinks</li>
+          <li>Priority baggage handling</li>
+        </ul>
+        <a href="https://www.roblox.com/catalog/89470685605407/Sankai-Airlines-BC-ticket" class="btn" target="_blank">Buy Business Class</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2 class="section-title">Discord Public Rules</h2>
+    <p class="section-subtitle">Community rules to keep Sankai Airlines safe and enjoyable for everyone.</p>
+
+    <ol class="rules-list">
+      <li>Please do not send insulting or offensive messages to other members.</li>
+      <li>Please do not share any inappropriate, NSFW, or disturbing content in the chat.</li>
+      <li>Do not use any hacks, exploits, cheats, or glitches during flights or in the airport.</li>
+      <li>Do not spam, flood the chat, or repeatedly ping staff members.</li>
+      <li>Respect all staff members, administrators, and fellow community members.</li>
+      <li>Do not advertise other games, servers, or groups without permission.</li>
+      <li>Keep conversations in the correct channels and follow channel topics.</li>
+      <li>If you have any issues or questions, please open a ticket in <strong>#support</strong>.</li>
+    </ol>
+  </section>
+
+  <section id="staff" style="background: var(--darker); border-radius: 30px;">
+    <h2 class="section-title">Sankai Airlines Staff Handbook</h2>
+    <p class="section-subtitle">Rules and expectations for all Sankai Airlines employees.</p>
+
+    <ol class="handbook-list">
+      <li>Please join the server at least 10 minutes before the flight opens.</li>
+      <li>Do not use offensive or insulting language toward passengers or staff.</li>
+      <li>Do not insult, disrespect, or argue with any staff members or management.</li>
+      <li>Do not misuse admin commands or tools under any circumstances.</li>
+      <li>Always assist any passenger who needs help or has questions.</li>
+      <li>Wear the correct uniform for your role and department during shifts.</li>
+      <li>Stay in character during flights and follow roleplay procedures.</li>
+      <li>Report rule-breakers, trolls, or exploiters to supervisors immediately.</li>
+      <li>Follow the chain of command and respect department managers.</li>
+      <li>Represent Sankai Airlines professionally at all times.</li>
+    </ol>
+
+    <div class="highlight-box">
+      <h3>💼 Staff Applications</h3>
+      <p>Want to join the Sankai Airlines team? Visit our Discord server and open an application ticket. Applications open regularly for Cabin Crew, Ground Crew, Airport Staff, and Pilots.</p>
+      <a href="https://discord.gg/9sFHnWtNx" class="btn" target="_blank" style="margin-top: 1rem;">Apply on Discord</a>
+    </div>
+  </section>
+
+  <section id="owners">
+    <h2 class="section-title">Meet The Owners</h2>
+    <p class="section-subtitle">The leadership team behind Sankai Airlines.</p>
+
+    <div class="grid" style="max-width: 700px;">
+      <div class="card owner-card">
+        <div class="owner-avatar">A</div>
+        <h3>lol160129</h3>
+        <p style="color: var(--accent); font-weight: 600;">Andreas</p>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Co-Owner & Founder of Sankai Airlines</p>
+      </div>
+      <div class="card owner-card">
+        <div class="owner-avatar">N</div>
+        <h3>nicholasmallorca</h3>
+        <p style="color: var(--accent); font-weight: 600;">Nick</p>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Co-Owner & Founder of Sankai Airlines</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-subtitle">Common questions about Sankai Airlines.</p>
+
+    <div class="faq-item">
+      <h4>How do I join a flight?</h4>
+      <p>Join our Discord server, check the flight schedule, and join the game when a flight opens. Make sure to buy a ticket if you want Premium Economy or Business Class.</p>
+    </div>
+    <div class="faq-item">
+      <h4>How do I become staff?</h4>
+      <p>Open an application ticket in our Discord server when applications are open. You can apply for Cabin Crew, Ground Crew, Airport Staff, or Pilot roles.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Can I be a pilot?</h4>
+      <p>Yes! Pilot applications are open regularly. You must attend training and pass exams to advance through pilot ranks.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Do I need tickets to fly?</h4>
+      <p>Economy Class is free. Premium Economy and Business Class tickets are optional but give you extra perks and comfort.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Who are the owners?</h4>
+      <p>Sankai Airlines is owned by Andreas (lol160129) and Nick (nicholasmallorca).</p>
+    </div>
+  </section>
+
+  <section class="discord-section">
+    <h2 class="section-title">Join Our Discord</h2>
+    <p class="section-subtitle">Flight schedules, announcements, staff applications, and community events.</p>
+
+    <div class="discord-box">
+      <div class="discord-icon">💬</div>
+      <div class="discord-info">
+        <h2>Sankai Airlines Community</h2>
+        <p>Connect with other players, get notified about upcoming flights, apply for staff roles, and chat with the community.</p>
+        <a href="https://discord.gg/9sFHnWtNx" class="btn discord-btn" target="_blank">Join Discord Server</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 <strong>Sankai Airlines</strong>. A Roblox Airport Roleplay Game.</p>
+    <p style="margin-top: 0.5rem;">Not affiliated with Roblox Corporation. | <a href="https://discord.gg/9sFHnWtNx" target="_blank">Discord</a></p>
+  </footer>
+
+</body>
+</html>
